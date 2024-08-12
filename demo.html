@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Text Editor</title>
+</head>
+<body>
+    <input type="file" id="imageInput" accept="image/*">
+    <br>
+    <input type="text" id="textInput" placeholder="Enter text to add">
+    <br>
+    <button id="downloadButton">Download Image</button>
+    <br>
+    <canvas id="canvas" style="border: 1px solid black;"></canvas>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const textInput = document.getElementById('textInput');
+        const downloadButton = document.getElementById('downloadButton');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let image = new Image();
+
+        // Handle image upload
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                image.src = e.target.result;
+                image.onload = () => {
+                    // Resize canvas to match image
+                    canvas.width = image.width;
+                    canvas.height = image.height;
+                    // Draw image on canvas
+                    ctx.drawImage(image, 0, 0);
+                };
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle text input change
+        textInput.addEventListener('input', () => {
+            if (image.src) {
+                // Clear canvas and redraw image
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(image, 0, 0);
+                // Draw text on image
+                ctx.font = '30px Arial';
+                ctx.fillStyle = 'white';
+                ctx.fillText(textInput.value, 100, 150); // You can adjust the position and style
+            }
+        });
+
+        // Handle download button click
+        downloadButton.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'edited-image.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    </script>
+</body>
+</html>
