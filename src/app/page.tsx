@@ -14,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import VerseBlock from "@/components/verseBlock";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 
 interface ILanguage {
@@ -84,8 +84,9 @@ export default function Home() {
   const [chapters, setChapters] = useState<string[]>([]);
   const [chapter, setChapter] = useState<string>(""); //provavelmente sera apagado
   const [verses, setVerses] = useState<Iverse[]>([]);
-  const image = new Image(3366, 768);
+  const [image, setImage] = useState( new Image());
   const [selectedVerses, setselectedVerses] = useState<Iverse[]>([] as any);
+  const canvasRef = useRef(null);
 
 
   useEffect(() => {
@@ -102,10 +103,6 @@ export default function Home() {
       })
   }, [])
 
-  // useEffect(() => {
-  //   console.log(selectedVerses);
-  // }, [selectedVerses])
-  
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -125,6 +122,8 @@ export default function Home() {
                 <Select onValueChange={(value) => {
                   const selectedLang = languages.filter(language => language.abbrev == value);
                   setLanguage(selectedLang[0]);
+                  setVerses([]);
+                  setselectedVerses([]);
                 }} >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Language" />
@@ -145,6 +144,8 @@ export default function Home() {
                 <Label >Bible Version</Label>
                 <Select onValueChange={(value) => {
                   setVersion((versionByAbbrev.get(value) as IVersion))
+                  setVerses([]);
+                  setselectedVerses([]);
                 }}>
                   <SelectTrigger className="w-[20em]">
                     <SelectValue placeholder="Version" />
@@ -169,6 +170,8 @@ export default function Home() {
                   }
 
                   setChapters(newChapters);
+                  setVerses([]);
+                  setselectedVerses([]);
                 }}>
                   <SelectTrigger className="w-[20em]">
                     <SelectValue placeholder="Books" />
@@ -211,13 +214,13 @@ export default function Home() {
               </div>
             </div>
             {(verses.length != 0) ?
-              (<div className="grid grid-cols-4 gap-4 bg-slate-100 p-2">
-                {verses.map((verse, index) => <div onClick={() => {setselectedVerses((prev) => [...prev, verse])}} key={index}><VerseBlock verseNumber={verse.number} /></div>)}
+              (<div className="grid grid-cols-4 gap-4 bg-slate-100 p-2 max-h-56 overflow-y-scroll">
+                {verses.map((verse, index) => <div onClick={() => { setselectedVerses((prev) => [...prev, verse]) }} key={index}><VerseBlock verseNumber={verse.number} /></div>)}
               </div>) : <></>
             }
           </CardContent>
-          <CardFooter className="justify-start">
-            <Button >Make</Button>
+          <CardFooter className="justify-start gap-2">
+            <Button onClick={() => setselectedVerses([])} >Clear</Button> <Button >Make</Button>
           </CardFooter>
         </Card >
         <Card className="h-fit w-[50%] shadow-lg">
@@ -226,10 +229,35 @@ export default function Home() {
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
           <CardContent>
-            <Canvas image={image} verses={selectedVerses} />
+            <Canvas canvasRef={canvasRef} image={image} verses={selectedVerses} />
           </CardContent>
-          <CardFooter>
-            <Button>Download</Button>
+          <CardFooter className="flex justify-between">
+            <Button onClick={ async () => {
+              const inputFile = document.createElement('input');
+              inputFile.type = "file"
+              const newImage = new Image();
+              const reader = new FileReader();
+              inputFile.onchange = (ev) => {
+                // newImage.src = 
+                // console.log(inputFile.files[0]);
+                reader.onload = e => {
+                  console.log(ev);
+                }
+              
+              }
+              inputFile.click();
+              
+              
+            }}>Change Image</Button> <Button onClick={() => {
+              if (verses.length != 0) {
+                const link = document.createElement('a');
+                link.download = 'edited-image.png';
+                link.href = canvasRef.current.toDataURL();
+                link.click();
+              } else {
+                alert("Nenhum versiculo selecionado")
+              }
+            }}>Download</Button>
           </CardFooter>
         </Card>
       </main>

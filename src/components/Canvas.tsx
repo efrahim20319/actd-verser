@@ -1,42 +1,50 @@
 "use client"
 import { Iverse } from "@/app/page";
-import { document } from "postcss";
-import { FunctionComponent, useEffect, useRef } from "react";
+import { Dispatch, FunctionComponent, MutableRefObject, SetStateAction, useEffect, useRef } from "react";
 
 interface CanvasProps {
     verses: Iverse[];
     image: HTMLImageElement;
+    canvasRef: MutableRefObject<null>
 }
 
 function printVerse(verse: Iverse, context: any, currentHeight: number = 150) {
-    let startStr = 0, endStr = 50;
+    let startStr = 0, endStr = 60;
+    let heightIncrement = 55;
     let substring = "";
+    let firstInteration = true;
+    const textWidth = 1350;
+    console.log(verse);
     
-    if (verse.text.length > 55) {
-        while (startStr < verse.text.length) {
-            substring = verse.text.substring(startStr, endStr);
-            if (substring.startsWith(" ")) substring.substring(1);
-            context.fillText(substring, 100, currentHeight); // You can adjust the position and style
-            currentHeight += 55;
-            startStr += 50;
-            endStr += 50;
+    if (verse.text.length > endStr) {
+        while (startStr <= verse.text.length) {
+            if (firstInteration) {
+                substring = (verse.number + " - " + verse.text.substring(startStr, endStr)).trim();
+                firstInteration = false;
+            } else { substring = (verse.text.substring(startStr, endStr)).trim(); }
+            context.fillText(substring, 100, currentHeight, textWidth); // You can adjust the position and style
+            currentHeight += heightIncrement;
+            startStr += endStr;
+            endStr += endStr;
         }
     } else {
-        context.fillText(verse.text, 100, currentHeight); // You can adjust the position and style
-        currentHeight += 55;
+        context.fillText(verse.number + " - " + verse.text, 100, currentHeight, textWidth); // You can adjust the position and style
+        currentHeight += heightIncrement;
     }
     return currentHeight + 15;
 }
 
-const Canvas: FunctionComponent<CanvasProps> = ({ verses, image }) => {
-    const canvasRef = useRef(null);
+const Canvas: FunctionComponent<CanvasProps> = ({ verses, image, canvasRef }) => {
+    
     image.src = "/assets/img/test.jpg";
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         image.onload = (e) => {
+            canvasRef.current.width = image.naturalWidth;
+            canvasRef.current.height = image.naturalHeight;
             context.drawImage(image, 0, 0);
-            context.font = '60px Arial';
+            context.font = '50px Arial';
             context.fillStyle = 'white';
             if (image.src) {
                 let currentHeight = 150;
@@ -47,10 +55,9 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verses, image }) => {
         }
 
 
+    }, [verses, image, canvasRef])
 
-    }, [verses, image])
-    
-    return (<canvas className="w-full rounded-md" width={1536} height={878} ref={canvasRef} />);
+    return (<canvas className="w-full rounded-md" ref={canvasRef} />);
 }
 
 export default Canvas;
