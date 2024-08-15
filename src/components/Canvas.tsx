@@ -3,7 +3,7 @@ import { Iverse } from "@/app/page";
 import { Dispatch, FunctionComponent, MutableRefObject, SetStateAction, useEffect, useRef } from "react";
 
 interface CanvasProps {
-    verses: Iverse[];
+    verseByNumber: Map<number, Iverse>;
     image: HTMLImageElement;
     canvasRef: MutableRefObject<null>
 }
@@ -14,7 +14,6 @@ function printVerse(verse: Iverse, context: any, currentHeight: number = 150) {
     let substring = "";
     let firstInteration = true;
     const textWidth = 1350;
-    console.log(verse);
     
     if (verse.text.length > endStr) {
         while (startStr <= verse.text.length) {
@@ -34,18 +33,25 @@ function printVerse(verse: Iverse, context: any, currentHeight: number = 150) {
     return currentHeight + 15;
 }
 
-const Canvas: FunctionComponent<CanvasProps> = ({ verses, image, canvasRef }) => {
+const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, image, canvasRef }) => {
     
     image.src = "/assets/img/test.jpg";
     useEffect(() => {
         const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
+        const context = canvas?.getContext('2d');
+        const verses = verseByNumber.values().toArray().sort((a, b) => {
+            if (a.number > b.number) {
+                return 1;
+            }
+            return -1;
+        });
         image.onload = (e) => {
             canvasRef.current.width = image.naturalWidth;
             canvasRef.current.height = image.naturalHeight;
             context.drawImage(image, 0, 0);
             context.font = '50px Arial';
             context.fillStyle = 'white';
+
             if (image.src) {
                 let currentHeight = 150;
                 for (const verse of verses) {
@@ -55,7 +61,7 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verses, image, canvasRef }) =>
         }
 
 
-    }, [verses, image, canvasRef])
+    }, [verseByNumber, image, canvasRef])
 
     return (<canvas className="w-full rounded-md" ref={canvasRef} />);
 }

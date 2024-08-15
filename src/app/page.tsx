@@ -84,9 +84,11 @@ export default function Home() {
   const [chapters, setChapters] = useState<string[]>([]);
   const [chapter, setChapter] = useState<string>(""); //provavelmente sera apagado
   const [verses, setVerses] = useState<Iverse[]>([]);
-  const [image, setImage] = useState( new Image());
-  const [selectedVerses, setselectedVerses] = useState<Iverse[]>([] as any);
+  const [image, setImage] = useState(new Image());
+  const [verseByNumber, setverseByNumber] = useState<Map<number, Iverse>>(new Map());
   const canvasRef = useRef(null);
+  const [versesStates, setVersesStates] = useState<boolean[]>([])
+
 
 
   useEffect(() => {
@@ -123,7 +125,7 @@ export default function Home() {
                   const selectedLang = languages.filter(language => language.abbrev == value);
                   setLanguage(selectedLang[0]);
                   setVerses([]);
-                  setselectedVerses([]);
+                  setverseByNumber(new Map());
                 }} >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Language" />
@@ -145,7 +147,7 @@ export default function Home() {
                 <Select onValueChange={(value) => {
                   setVersion((versionByAbbrev.get(value) as IVersion))
                   setVerses([]);
-                  setselectedVerses([]);
+                  setverseByNumber(new Map());
                 }}>
                   <SelectTrigger className="w-[20em]">
                     <SelectValue placeholder="Version" />
@@ -171,7 +173,7 @@ export default function Home() {
 
                   setChapters(newChapters);
                   setVerses([]);
-                  setselectedVerses([]);
+                  setverseByNumber(new Map());
                 }}>
                   <SelectTrigger className="w-[20em]">
                     <SelectValue placeholder="Books" />
@@ -196,6 +198,7 @@ export default function Home() {
                       if (results.ok) {
                         results.json().then(data => {
                           setVerses(data.verses)
+                          setVersesStates(Array(data.verses.length).fill(false));
                         })
                       } else {
                         console.log(results);
@@ -215,12 +218,23 @@ export default function Home() {
             </div>
             {(verses.length != 0) ?
               (<div className="grid grid-cols-4 gap-4 bg-slate-100 p-2 max-h-56 overflow-y-scroll">
-                {verses.map((verse, index) => <div onClick={() => { setselectedVerses((prev) => [...prev, verse]) }} key={index}><VerseBlock verseNumber={verse.number} /></div>)}
+                {verses.map((verse, index) => (<div onClick={() => {
+                  setverseByNumber((prev) => {
+                    if (prev.has(verse.number)) {
+                      prev.delete(verse.number);
+                      return new Map(prev);
+                    }
+                    prev.set(verse.number, verse);
+                    return new Map(prev);
+                  })
+                  versesStates[index] = !versesStates[index];
+                  setVersesStates([...versesStates]);
+                }} key={index}><VerseBlock selected={versesStates[index]} verseNumber={verse.number} /></div>))}
               </div>) : <></>
             }
           </CardContent>
           <CardFooter className="justify-start gap-2">
-            <Button onClick={() => setselectedVerses([])} >Clear</Button> <Button >Make</Button>
+            <Button onClick={() => { setverseByNumber(new Map()); setVersesStates((prev => [...prev].fill(false))) }} >Clear</Button> <Button >Make</Button>
           </CardFooter>
         </Card >
         <Card className="h-fit w-[50%] shadow-lg">
@@ -229,10 +243,10 @@ export default function Home() {
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
           <CardContent>
-            <Canvas canvasRef={canvasRef} image={image} verses={selectedVerses} />
+            <Canvas canvasRef={canvasRef} image={image} verseByNumber={verseByNumber} />
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button onClick={ async () => {
+            <Button onClick={async () => {
               const inputFile = document.createElement('input');
               inputFile.type = "file"
               const newImage = new Image();
@@ -243,11 +257,9 @@ export default function Home() {
                 reader.onload = e => {
                   console.log(ev);
                 }
-              
+
               }
               inputFile.click();
-              
-              
             }}>Change Image</Button> <Button onClick={() => {
               if (verses.length != 0) {
                 const link = document.createElement('a');
