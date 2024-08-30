@@ -252,7 +252,7 @@ export default function Home() {
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
           <CardContent>
-            <Canvas passageTitle={passageTitle} canvasRef={canvasRef} image={image} verseByNumber={verseByNumber} />
+            {/* <Canvas passageTitle={passageTitle} canvasRef={canvasRef} image={image} verseByNumber={verseByNumber} /> */}
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button onClick={async () => {
