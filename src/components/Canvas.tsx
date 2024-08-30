@@ -65,7 +65,8 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, image, canvasRe
     useEffect(() => {
         const canvas = canvasRef.current as any;
         const context = canvas.getContext('2d');
-        const verses = verseByNumber.values().toArray().sort((a, b) => {
+        const verses = Array.from(verseByNumber.values());
+        verses.sort((a, b) => {
             if (a.number > b.number) {
                 return 1;
             }

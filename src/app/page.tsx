@@ -228,7 +228,8 @@ export default function Home() {
                     prev.set(verse.number, verse);
                     return new Map(prev);
                   })
-                  const verses = verseByNumber.values().toArray().sort((a, b) => {
+                  const verses = Array.from(verseByNumber.values());
+                  verses.sort((a, b) => {
                     if (a.number > b.number) {
                       return 1;
                     }
@@ -269,7 +270,8 @@ export default function Home() {
               }
               inputFile.click();
             }}>Change Image</Button> <Button onClick={() => {
-              const verses = verseByNumber.values().toArray().sort((a, b) => {
+              const verses = Array.from(verseByNumber.values());
+              verses.sort((a, b) => {
                 if (a.number > b.number) {
                   return 1;
                 }
