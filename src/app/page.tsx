@@ -84,7 +84,7 @@ export default function Home() {
   const [chapters, setChapters] = useState<string[]>([]);
   const [chapter, setChapter] = useState<string>(""); //provavelmente sera apagado
   const [verses, setVerses] = useState<Iverse[]>([]);
-  const [image, setImage] = useState(new Image());
+  // const [image, setImage] = useState(null as any);
   const [verseByNumber, setverseByNumber] = useState<Map<number, Iverse>>(new Map());
   const canvasRef = useRef(null as any);
   const [versesStates, setVersesStates] = useState<boolean[]>([])
@@ -252,7 +252,7 @@ export default function Home() {
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
           <CardContent>
-            {/* <Canvas passageTitle={passageTitle} canvasRef={canvasRef} image={image} verseByNumber={verseByNumber} /> */}
+            <Canvas passageTitle={passageTitle} canvasRef={canvasRef} verseByNumber={verseByNumber} />
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button onClick={async () => {

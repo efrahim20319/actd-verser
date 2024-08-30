@@ -4,7 +4,7 @@ import { Dispatch, FunctionComponent, MutableRefObject, SetStateAction, useEffec
 
 interface CanvasProps {
     verseByNumber: Map<number, Iverse>;
-    image: HTMLImageElement;
+
     canvasRef: MutableRefObject<any>
     passageTitle: string;
 }
@@ -59,10 +59,11 @@ function printVerse(verse: Iverse, context: any, currentHeight: number = 150, te
     return currentHeight + 85;
 }
 
-const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, image, canvasRef, passageTitle }) => {
+const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, passageTitle }) => {
     
-    image.src = "/assets/img/Bible 1.jpg";
     useEffect(() => {
+        const image = new Image();
+        image.src = "/assets/img/Bible 1.jpg";
         const canvas = canvasRef.current as any;
         const context = canvas.getContext('2d');
         const verses = Array.from(verseByNumber.values());
@@ -97,7 +98,7 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, image, canvasRe
         }
 
 
-    }, [verseByNumber, image, canvasRef, passageTitle])
+    }, [verseByNumber, canvasRef, passageTitle])
 
     return (<canvas className="w-full rounded-md" ref={canvasRef} />);
 }
