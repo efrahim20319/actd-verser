@@ -88,6 +88,7 @@ export default function Home() {
   const [verseByNumber, setverseByNumber] = useState<Map<number, Iverse>>(new Map());
   const canvasRef = useRef(null);
   const [versesStates, setVersesStates] = useState<boolean[]>([])
+  const [passageTitle, setPassageTitle] = useState("");
 
 
 
@@ -227,6 +228,13 @@ export default function Home() {
                     prev.set(verse.number, verse);
                     return new Map(prev);
                   })
+                  const verses = verseByNumber.values().toArray().sort((a, b) => {
+                    if (a.number > b.number) {
+                      return 1;
+                    }
+                    return -1;
+                  });
+                  setPassageTitle(`${book.name} ${chapter}:${verses[0].number} - ${verses[verses.length - 1].number}`);
                   versesStates[index] = !versesStates[index];
                   setVersesStates([...versesStates]);
                 }} key={index}><VerseBlock selected={versesStates[index]} verseNumber={verse.number} /></div>))}
@@ -243,7 +251,7 @@ export default function Home() {
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
           <CardContent>
-            <Canvas canvasRef={canvasRef} image={image} verseByNumber={verseByNumber} />
+            <Canvas passageTitle={passageTitle} canvasRef={canvasRef} image={image} verseByNumber={verseByNumber} />
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button onClick={async () => {
@@ -261,9 +269,16 @@ export default function Home() {
               }
               inputFile.click();
             }}>Change Image</Button> <Button onClick={() => {
+              const verses = verseByNumber.values().toArray().sort((a, b) => {
+                if (a.number > b.number) {
+                  return 1;
+                }
+                return -1;
+              });
               if (verses.length != 0) {
                 const link = document.createElement('a');
-                link.download = 'edited-image.png';
+                link.download = `${book.name} ${chapter} (${verses[0].number} - ${verses[verses.length - 1].number}).png`;
+                
                 link.href = canvasRef.current.toDataURL();
                 link.click();
               } else {
