@@ -258,7 +258,7 @@ export default function Home() {
             <Button onClick={async () => {
               const inputFile = document.createElement('input');
               inputFile.type = "file"
-              // const newImage = new Image();
+              const newImage = new Image();
               const reader = new FileReader();
               inputFile.onchange = (ev) => {
                 // newImage.src = 
