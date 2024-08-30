@@ -86,7 +86,7 @@ export default function Home() {
   const [verses, setVerses] = useState<Iverse[]>([]);
   const [image, setImage] = useState(new Image());
   const [verseByNumber, setverseByNumber] = useState<Map<number, Iverse>>(new Map());
-  const canvasRef = useRef(null);
+  const canvasRef = useRef(null as any);
   const [versesStates, setVersesStates] = useState<boolean[]>([])
   const [passageTitle, setPassageTitle] = useState("");
 

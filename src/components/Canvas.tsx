@@ -5,7 +5,7 @@ import { Dispatch, FunctionComponent, MutableRefObject, SetStateAction, useEffec
 interface CanvasProps {
     verseByNumber: Map<number, Iverse>;
     image: HTMLImageElement;
-    canvasRef: MutableRefObject<null>
+    canvasRef: MutableRefObject<any>
     passageTitle: string;
 }
 
@@ -73,8 +73,11 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, image, canvasRe
             return -1;
         });
         image.onload = (e) => {
-            canvasRef.current.width = image.naturalWidth;
-            canvasRef.current.height = image.naturalHeight;
+            if (canvasRef.current ) {
+
+                canvasRef.current.width = image.naturalWidth;
+                canvasRef.current.height = image.naturalHeight;
+            }
             context.drawImage(image, 0, 0);
             context.font = '50px Arial';
             context.fillStyle = 'white';
