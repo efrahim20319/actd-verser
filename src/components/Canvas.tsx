@@ -64,6 +64,7 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, pass
     useEffect(() => {
         const image = new Image();
         image.src = "/assets/img/Bible 1.jpg";
+        
         const canvas = canvasRef.current as any;
         const context = canvas.getContext('2d');
         const verses = Array.from(verseByNumber.values());
@@ -86,6 +87,7 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, pass
             const versesString:string = verses.map(verse => `(${verse.number}) ${verse.text}`).join()
 
             if (image.src) {
+                image.style.filter = "blur(105px)";
                 let currentHeight = 200;
                 context.fillText(passageTitle, Number(image.naturalWidth) / 2, 100);
                 context.textAlign = "start";

@@ -14,68 +14,18 @@ import {
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import VerseBlock from "@/components/verseBlock";
+import { languages } from "@/data/languages";
+import { versionByAbbrev } from "@/data/versionByAbbrev";
+import { IBook } from "@/utils/IBook";
+import { ILanguage } from "@/utils/ILanguage";
+import { Iverse } from "@/utils/Iverse";
+import { IVersion } from "@/utils/IVersion";
 import { useEffect, useRef, useState } from "react";
 
 
-interface ILanguage {
-  abbrev: string;
-  fullName: string;
-  versions: IVersion[]
-}
-
-interface IVersion {
-  abbrev: string;
-  fullName: string;
-}
-
-interface IBook {
-  abbrev: {
-    pt: string,
-    en: string
-  },
-  author: string,
-  chapters: number,
-  group: string,
-  name: string,
-  testament: string
-}
-
-export interface Iverse {
-  number: number;
-  text: string
-}
-
 export default function Home() {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHIiOiJNb24gQXVnIDEyIDIwMjQgMTM6MTg6NDggR01UKzAwMDAuZWZyYWhpbXRrc0BnbWFpbC5jb20iLCJpYXQiOjE3MjM0Njg3Mjh9.tSvIHXnoxOkLC93q0Rddky_DGW3wOIS14ghuGdO7DEU";
-  const versionByAbbrev: Map<string, IVersion> = new Map();
-  versionByAbbrev.set("acf", { abbrev: "acf", fullName: "Almeida Corrigida Fiel" })
-  versionByAbbrev.set("nvi", { abbrev: "nvi", fullName: "Nova Versão Internacional" })
-  versionByAbbrev.set("ra", { abbrev: "ra", fullName: "Revista e Atualizada" })
-  versionByAbbrev.set("apee", { abbrev: "apee", fullName: "La Bible de l'Épée" })
-  versionByAbbrev.set("bbe", { abbrev: "bbe", fullName: "Bible In Basic English" })
-  versionByAbbrev.set("kjv", { abbrev: "kjv", fullName: "King James Version" })
-  versionByAbbrev.set("rvr", { abbrev: "rvr", fullName: "Reina-Valera" })
+  const token = process.env.NEXT_PUBLIC_AUTHTOKEN;
 
-
-
-  const languages: ILanguage[] = [
-    {
-      abbrev: "ptr", fullName: "Portugues",
-      versions: [versionByAbbrev.get('acf'), versionByAbbrev.get('nvi'), versionByAbbrev.get('ra')] as IVersion[]
-    },
-    {
-      abbrev: "frc", fullName: "French",
-      versions: [versionByAbbrev.get('apee')] as IVersion[]
-    },
-    {
-      abbrev: "eng", fullName: "English",
-      versions: [versionByAbbrev.get('bbe'), versionByAbbrev.get('kjv')] as IVersion[]
-    },
-    {
-      abbrev: "spn", fullName: "Spanish",
-      versions: [versionByAbbrev.get('rvr')] as IVersion[]
-    },
-  ]
 
   const [language, setLanguage] = useState(languages[0]);
   const [version, setVersion] = useState<IVersion>(languages[0].versions[0]);
@@ -84,7 +34,6 @@ export default function Home() {
   const [chapters, setChapters] = useState<string[]>([]);
   const [chapter, setChapter] = useState<string>(""); //provavelmente sera apagado
   const [verses, setVerses] = useState<Iverse[]>([]);
-  // const [image, setImage] = useState(null as any);
   const [verseByNumber, setverseByNumber] = useState<Map<number, Iverse>>(new Map());
   const canvasRef = useRef(null as any);
   const [versesStates, setVersesStates] = useState<boolean[]>([])
@@ -105,6 +54,61 @@ export default function Home() {
         }
       })
   }, [])
+
+  function getVerses(version: IVersion, book: IBook, chapter: string) {
+    fetch(`https://www.abibliadigital.com.br/api/verses/${version.abbrev}/${book.abbrev.pt}/${chapter}`, {
+      headers: {
+        "authorization": `Bearer ${token}`
+      }
+    })
+      .then(results => {
+        if (results.ok) {
+          results.json().then(data => {
+            setVerses(data.verses)
+            setVersesStates(Array(data.verses.length).fill(false));
+          })
+        } else {
+          console.log(results);
+        }
+      })
+  }
+
+  function createTitle(book: IBook, chapter: string, verses: Iverse[]): string {
+    if (verses.length == 0) {
+      return "";
+    }
+    if (verses.length == 1) {
+      return `${book.name} ${chapter}:${verses[0].number}`;
+    }
+    let finalString = String(verses[0].number);
+    let countSeq = 0;
+    let atual, prev;
+    for (let index = 1; index < verses.length; index++) {
+
+      if (verses[index - 1].number == verses[index].number - 1) {
+        countSeq += 1;
+      }
+      if ((verses[index - 1].number != verses[index].number - 1) && countSeq > 0) {
+        countSeq = 0;
+        finalString += ` - ${verses[index - 1].number},${verses[index].number}`
+        continue;
+      }
+      if ((verses[index - 1].number != verses[index].number - 1) && countSeq == 0) {
+        finalString += `,${verses[index].number}`
+      }
+      if ((verses[index - 1].number == verses[index].number - 1) && (index == verses.length - 1)) {
+        finalString += ` - ${verses[index].number}`
+      }
+    }
+    return `${book.name} ${chapter}:${finalString}`;
+  }
+
+  function clear() {
+    setverseByNumber(new Map()); 
+    setVersesStates((prev => [...prev].fill(false)));
+    setPassageTitle("");
+  }
+
 
 
   return (
@@ -147,8 +151,13 @@ export default function Home() {
                 <Label >Bible Version</Label>
                 <Select onValueChange={(value) => {
                   setVersion((versionByAbbrev.get(value) as IVersion))
-                  setVerses([]);
-                  setverseByNumber(new Map());
+                  setVerses([]); //resetar versiculos
+                  setverseByNumber(new Map()); // resetar o mar verseByNumber
+                  if (book && chapter) {
+                    clear();
+                    getVerses(versionByAbbrev.get(value) as IVersion, book, chapter);
+                    
+                  }
                 }}>
                   <SelectTrigger className="w-[20em]">
                     <SelectValue placeholder="Version" />
@@ -165,16 +174,19 @@ export default function Home() {
               <div>
                 <Label>Book</Label>
                 <Select onValueChange={(value) => {
-                  const selectedBook = books.filter(book => book['abbrev']['pt'] == value)[0];
+                  const [selectedBook] = books.filter(book => book['abbrev']['pt'] == value);
                   setBook(selectedBook);
                   const newChapters = [];
                   for (let index = 0; index < selectedBook["chapters"]; index++) {
                     newChapters.push(String(index + 1))
                   }
-
                   setChapters(newChapters);
                   setVerses([]);
                   setverseByNumber(new Map());
+                  console.log(chapter);
+                  console.log(version, book, chapter);
+
+                  getVerses(version, selectedBook, chapter);
                 }}>
                   <SelectTrigger className="w-[20em]">
                     <SelectValue placeholder="Books" />
@@ -189,22 +201,9 @@ export default function Home() {
               <div>
                 <Label>Chapter</Label>
                 <Select onValueChange={value => {
+                  clear();
                   setChapter(value);
-                  fetch(`https://www.abibliadigital.com.br/api/verses/${version.abbrev}/${book.abbrev.pt}/${value}`, {
-                    headers: {
-                      "authorization": `Bearer ${token}`
-                    }
-                  })
-                    .then(results => {
-                      if (results.ok) {
-                        results.json().then(data => {
-                          setVerses(data.verses)
-                          setVersesStates(Array(data.verses.length).fill(false));
-                        })
-                      } else {
-                        console.log(results);
-                      }
-                    })
+                  getVerses(version, book, value);
                 }}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Version" />
@@ -235,7 +234,8 @@ export default function Home() {
                     }
                     return -1;
                   });
-                  setPassageTitle(`${book.name} ${chapter}:${verses[0].number} - ${verses[verses.length - 1].number}`);
+
+                  setPassageTitle(createTitle(book, chapter, verses));
                   versesStates[index] = !versesStates[index];
                   setVersesStates([...versesStates]);
                 }} key={index}><VerseBlock selected={versesStates[index]} verseNumber={verse.number} /></div>))}
@@ -243,7 +243,7 @@ export default function Home() {
             }
           </CardContent>
           <CardFooter className="justify-start gap-2">
-            <Button onClick={() => { setverseByNumber(new Map()); setVersesStates((prev => [...prev].fill(false))) }} >Clear</Button> <Button >Make</Button>
+            <Button onClick={() => clear()} >Clear</Button>
           </CardFooter>
         </Card >
         <Card className="h-fit w-[50%] shadow-lg">
@@ -279,8 +279,12 @@ export default function Home() {
               });
               if (verses.length != 0) {
                 const link = document.createElement('a');
-                link.download = `${book.name} ${chapter} (${verses[0].number} - ${verses[verses.length - 1].number}).png`;
-                
+                let filename = createTitle(book, chapter, verses).replace(":", " v ");
+                if (verses.length != 0) {
+
+                  link.download = `${filename}.png`;
+                }
+
                 link.href = canvasRef.current.toDataURL();
                 link.click();
               } else {
