@@ -1,5 +1,6 @@
 "use client"
-import { Iverse } from "@/app/page";
+
+import { Iverse } from "@/utils/Iverse";
 import { Dispatch, FunctionComponent, MutableRefObject, SetStateAction, useEffect, useRef } from "react";
 
 interface CanvasProps {
