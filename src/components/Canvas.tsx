@@ -21,7 +21,7 @@ function printAtWordWrap(context: any, text: string, x: number, y: number, lineH
     for (var line = 0; line < lines.length; line++) {
         if (fitWidth <= 0) {
             context.fillText(lines[line], x, y + (lineHeight * currentLine));
-            context.strokeText(lines[line], x, y + (lineHeight * currentLine));
+            // context.strokeText(lines[line], x, y + (lineHeight * currentLine));
             lastLine = y + (lineHeight * currentLine);
         } else {
             var words = lines[line].split(' ');
@@ -34,7 +34,7 @@ function printAtWordWrap(context: any, text: string, x: number, y: number, lineH
                         idx = 2;
                     }
                     context.fillText(words.slice(0, idx - 1).join(' '), x, y + (lineHeight * currentLine));
-                    context.strokeText(words.slice(0, idx - 1).join(' '), x, y + (lineHeight * currentLine));
+                    // context.strokeText(words.slice(0, idx - 1).join(' '), x, y + (lineHeight * currentLine));
                     lastLine = y + (lineHeight * currentLine);
                     currentLine++;
                     words = words.splice(idx - 1);
@@ -45,7 +45,7 @@ function printAtWordWrap(context: any, text: string, x: number, y: number, lineH
             }
             if (idx > 0) {
                 context.fillText(words.join(' '), x, y + (lineHeight * currentLine));
-                context.strokeText(words.join(' '), x, y + (lineHeight * currentLine));
+                // context.strokeText(words.join(' '), x, y + (lineHeight * currentLine));
                 lastLine = y + (lineHeight * currentLine);
             }
         }
@@ -55,16 +55,16 @@ function printAtWordWrap(context: any, text: string, x: number, y: number, lineH
 }
 
 function printVerse(verse: Iverse, context: any, currentHeight: number = 150, textWidth = 1350) {
-    let lineHeight = 55;
-    currentHeight = printAtWordWrap(context, (`${verse.number} - ${verse.text}`), 100, currentHeight, lineHeight, textWidth);
-    return currentHeight + 85;
+    let lineHeight = 60;
+    currentHeight = printAtWordWrap(context, (`${verse.number} - ${verse.text}`), 60, currentHeight, lineHeight, textWidth);
+    return currentHeight + 80;
 }
 
 const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, passageTitle }) => {
     
     useEffect(() => {
         const image = new Image();
-        image.src = "/assets/img/Bible 1.jpg";
+        image.src = "/assets/img/Bible 5.jpg";
         
         const canvas = canvasRef.current as any;
         const context = canvas.getContext('2d');
@@ -82,19 +82,19 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, pass
                 canvasRef.current.height = image.naturalHeight;
             }
             context.drawImage(image, 0, 0);
-            context.font = '50px Arial';
-            context.fillStyle = 'white';
+            context.font = 'bold 60px Arial';
+            context.fillStyle = 'black';
             context.textAlign = "center"; 
             const versesString:string = verses.map(verse => `(${verse.number}) ${verse.text}`).join()
 
             if (image.src) {
                 image.style.filter = "blur(105px)";
-                let currentHeight = 200;
-                context.fillText(passageTitle, Number(image.naturalWidth) / 2, 100);
+                let currentHeight = 150; //The starting heigth
+                context.fillText(passageTitle, Number(image.naturalWidth) / 2, 80);
                 context.textAlign = "start";
                 // printAtWordWrap(context, versesString, 100, 150, 55, 1350);
                 for (const verse of verses) {
-                    currentHeight = printVerse(verse, context, currentHeight, Number(image.naturalWidth) * 0.9);
+                    currentHeight = printVerse(verse, context, currentHeight, Number(image.naturalWidth) * 0.90);
                     
                 }
             }
