@@ -82,7 +82,7 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, pass
                 canvasRef.current.height = image.naturalHeight;
             }
             context.drawImage(image, 0, 0);
-            context.font = 'bold 60px Arial';
+            context.font = 'bold 65px Arial';
             context.fillStyle = 'black';
             context.textAlign = "center"; 
             const versesString:string = verses.map(verse => `(${verse.number}) ${verse.text}`).join()
