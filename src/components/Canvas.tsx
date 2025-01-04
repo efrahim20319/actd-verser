@@ -5,9 +5,14 @@ import { Dispatch, FunctionComponent, MutableRefObject, SetStateAction, useEffec
 
 interface CanvasProps {
     verseByNumber: Map<number, Iverse>;
-
     canvasRef: MutableRefObject<any>
     passageTitle: string;
+    titleFontSize: number;
+    verseFontSize: number;
+    lineHeight: number;
+    spaceBetweenVerses: number;
+    fontFamily: string;
+    bold: boolean;
 }
 
 
@@ -40,8 +45,7 @@ function printAtWordWrap(context: any, text: string, x: number, y: number, lineH
                     words = words.splice(idx - 1);
                     idx = 1;
                 }
-                else
-                { idx++; }
+                else { idx++; }
             }
             if (idx > 0) {
                 context.fillText(words.join(' '), x, y + (lineHeight * currentLine));
@@ -54,18 +58,17 @@ function printAtWordWrap(context: any, text: string, x: number, y: number, lineH
     return lastLine;
 }
 
-function printVerse(verse: Iverse, context: any, currentHeight: number = 150, textWidth = 1350) {
-    let lineHeight = 60;
+function printVerse(verse: Iverse, context: any, currentHeight: number = 150, textWidth = 1350, lineHeight = 60, spaceBetweenVerses = 80) {
     currentHeight = printAtWordWrap(context, (`${verse.number} - ${verse.text}`), 60, currentHeight, lineHeight, textWidth);
-    return currentHeight + 80;
+    return currentHeight + spaceBetweenVerses;
 }
 
-const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, passageTitle }) => {
-    
+const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, passageTitle, bold, fontFamily, lineHeight, titleFontSize, verseFontSize, spaceBetweenVerses }) => {
+
     useEffect(() => {
         const image = new Image();
         image.src = "/assets/img/Bible 5.jpg";
-        
+
         const canvas = canvasRef.current as any;
         const context = canvas.getContext('2d');
         const verses = Array.from(verseByNumber.values());
@@ -76,32 +79,33 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, pass
             return -1;
         });
         image.onload = (e) => {
-            if (canvasRef.current ) {
+            if (canvasRef.current) {
 
                 canvasRef.current.width = image.naturalWidth;
                 canvasRef.current.height = image.naturalHeight;
             }
             context.drawImage(image, 0, 0);
-            context.font = 'bold 60px Arial';
+            context.font = `${bold ? "bold" : ""} ${titleFontSize}px ${fontFamily}`; //Title configuration
             context.fillStyle = 'black';
-            context.textAlign = "center"; 
-            const versesString:string = verses.map(verse => `(${verse.number}) ${verse.text}`).join()
-
+            context.textAlign = "center";
+            const versesString: string = verses.map(verse => `(${verse.number}) ${verse.text}`).join()
             if (image.src) {
+                
                 image.style.filter = "blur(105px)";
-                let currentHeight = 150; //The starting heigth
+                let currentHeight = 150; //Height after the title
                 context.fillText(passageTitle, Number(image.naturalWidth) / 2, 80);
                 context.textAlign = "start";
+                context.font = `${bold ? "bold" : ""} ${verseFontSize}px ${fontFamily}`; //Verse configuration
                 // printAtWordWrap(context, versesString, 100, 150, 55, 1350);
                 for (const verse of verses) {
-                    currentHeight = printVerse(verse, context, currentHeight, Number(image.naturalWidth) * 0.90);
-                    
+                    currentHeight = printVerse(verse, context, currentHeight, Number(image.naturalWidth) * 0.90, lineHeight, spaceBetweenVerses);
+
                 }
             }
         }
 
 
-    }, [verseByNumber, canvasRef, passageTitle])
+    }, [verseByNumber, canvasRef, passageTitle, bold, fontFamily, titleFontSize, verseFontSize, lineHeight, spaceBetweenVerses])
 
     return (<canvas className="w-full rounded-md" ref={canvasRef} />);
 }
