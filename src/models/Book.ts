@@ -1,4 +1,4 @@
-export interface IBook {
+export interface Book {
     abbrev: {
       pt: string,
       en: string

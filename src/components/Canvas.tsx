@@ -1,10 +1,10 @@
 "use client"
 
-import { Iverse } from "@/utils/Iverse";
+import { Verse } from "@/models/Verse";
 import { Dispatch, FunctionComponent, MutableRefObject, SetStateAction, useEffect, useRef } from "react";
 
 interface CanvasProps {
-    verseByNumber: Map<number, Iverse>;
+    verseByNumber: Map<number, Verse>;
     canvasRef: MutableRefObject<any>
     passageTitle: string;
     titleFontSize: number;
@@ -13,6 +13,7 @@ interface CanvasProps {
     spaceBetweenVerses: number;
     fontFamily: string;
     bold: boolean;
+    imageSrc: String;
 }
 
 
@@ -58,16 +59,16 @@ function printAtWordWrap(context: any, text: string, x: number, y: number, lineH
     return lastLine;
 }
 
-function printVerse(verse: Iverse, context: any, currentHeight: number = 150, textWidth = 1350, lineHeight = 60, spaceBetweenVerses = 80) {
+function printVerse(verse: Verse, context: any, currentHeight: number = 150, textWidth = 1350, lineHeight = 60, spaceBetweenVerses = 80) {
     currentHeight = printAtWordWrap(context, (`${verse.number} - ${verse.text}`), 60, currentHeight, lineHeight, textWidth);
     return currentHeight + spaceBetweenVerses;
 }
 
-const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, passageTitle, bold, fontFamily, lineHeight, titleFontSize, verseFontSize, spaceBetweenVerses }) => {
+const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, passageTitle, bold, fontFamily, lineHeight, titleFontSize, verseFontSize, spaceBetweenVerses, imageSrc }) => {
 
     useEffect(() => {
         const image = new Image();
-        image.src = "/assets/img/Bible 5.jpg";
+        image.src = String(imageSrc);
 
         const canvas = canvasRef.current as any;
         const context = canvas.getContext('2d');
@@ -105,7 +106,7 @@ const Canvas: FunctionComponent<CanvasProps> = ({ verseByNumber, canvasRef, pass
         }
 
 
-    }, [verseByNumber, canvasRef, passageTitle, bold, fontFamily, titleFontSize, verseFontSize, lineHeight, spaceBetweenVerses])
+    }, [verseByNumber, canvasRef, passageTitle, bold, fontFamily, titleFontSize, verseFontSize, lineHeight, spaceBetweenVerses, imageSrc])
 
     return (<canvas className="w-full rounded-md" ref={canvasRef} />);
 }

@@ -1,6 +1,6 @@
-import { IVersion } from "@/utils/IVersion";
+import { Version } from "@/models/Version";
 
-export const versionByAbbrev: Map<string, IVersion> = new Map();
+export const versionByAbbrev: Map<string, Version> = new Map();
   versionByAbbrev.set("acf", { abbrev: "acf", fullName: "Almeida Corrigida Fiel" })
   versionByAbbrev.set("nvi", { abbrev: "nvi", fullName: "Nova Versão Internacional" })
   versionByAbbrev.set("ra", { abbrev: "ra", fullName: "Revista e Atualizada" })

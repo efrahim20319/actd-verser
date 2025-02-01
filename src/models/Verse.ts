@@ -1,4 +1,4 @@
-export interface Iverse {
+export interface Verse {
     number: number;
     text: string
 }

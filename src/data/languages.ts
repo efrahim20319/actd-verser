@@ -1,22 +1,22 @@
-import { ILanguage } from "@/utils/ILanguage";
-import { IVersion } from "@/utils/IVersion";
+import { Language } from "@/models/Language";
+import { Version } from "@/models/Version";
 import { versionByAbbrev } from "./versionByAbbrev";
 
-export const languages: ILanguage[] = [
+export const languages: Language[] = [
     {
       abbrev: "ptr", fullName: "Portugues",
-      versions: [versionByAbbrev.get('acf'), versionByAbbrev.get('nvi'), versionByAbbrev.get('ra')] as IVersion[]
+      versions: [versionByAbbrev.get('acf'), versionByAbbrev.get('nvi'), versionByAbbrev.get('ra')] as Version[]
     },
     {
       abbrev: "frc", fullName: "French",
-      versions: [versionByAbbrev.get('apee')] as IVersion[]
+      versions: [versionByAbbrev.get('apee')] as Version[]
     },
     {
       abbrev: "eng", fullName: "English",
-      versions: [versionByAbbrev.get('bbe'), versionByAbbrev.get('kjv')] as IVersion[]
+      versions: [versionByAbbrev.get('bbe'), versionByAbbrev.get('kjv')] as Version[]
     },
     {
       abbrev: "spn", fullName: "Spanish",
-      versions: [versionByAbbrev.get('rvr')] as IVersion[]
+      versions: [versionByAbbrev.get('rvr')] as Version[]
     },
   ]
