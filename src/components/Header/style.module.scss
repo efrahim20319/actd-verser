@@ -1,0 +1,13 @@
+@use "@/styles/colors.scss";
+
+.header {
+    height: 5em;
+    color: white;
+    background-color: colors.$base-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+
+    
+}

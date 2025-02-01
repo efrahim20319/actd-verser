@@ -32,8 +32,12 @@ import {
 } from "@/components/ui/dialog"
 import Image from "next/image";
 import AppContext from "./appContext";
-import ToolBar from "@/components/ToolBar";
+import ToolBar from "@/components/ToolBar/ToolBar";
 import createTitle from "@/utils/createTitle";
+import Header from "@/components/Header/Header";
+import SelectionCard from "@/components/SelectionCard/SelectionCard";
+import PreviewCard from "@/components/PreviewCard/PreviewCard";
+import styles from "./styles.module.scss";
 
 
 
@@ -110,14 +114,67 @@ export default function Home() {
 
   return (
     <AppContext.Provider value={{ bold, fontFamily, lineHeight, setBold, setFontFamily, setLineHeight, setSpaceBetweenVerses, setTitleFontSize, setVerseFontSize, spaceBetweenVerses, titleFontSize, verseFontSize }}>
-      <div className="min-h-screen flex flex-col">
+      <Header />
+      <ToolBar />
+      <main className={styles.content}>
+        <SelectionCard />
+        <PreviewCard />
+      </main>
+    </AppContext.Provider>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+<div className="min-h-screen flex flex-col">
         <header className="flex justify-center text-white  text-2xl bg-slate-500 p-6">
           <div><h1 className="inline font-bold">ACTD</h1> <span>Verser</span></div>
         </header>
         <main className="bg-gray-50 flex flex-col items-center">
           <ToolBar />
           <section className="flex flex-1 justify-around">
-            <Card className="h-fit w-[40%] shadow-lg">+
+            <Card className="h-fit w-[40%] shadow-lg">
               <CardHeader>
                 <CardTitle>Select the verse</CardTitle>
                 <CardDescription>Select he chapter and verse that will be used</CardDescription>
@@ -314,8 +371,6 @@ export default function Home() {
           </section>
 
         </main>
-      </div>
-    </AppContext.Provider>
+      </div>   
 
-  );
-}
+\*/ 

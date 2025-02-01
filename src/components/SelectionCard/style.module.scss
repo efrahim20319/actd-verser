@@ -1,0 +1,10 @@
+@use "@/styles/colors.scss";
+@use "@/styles/sizes.scss";
+
+
+.selectionCard {
+    background-color: colors.$base-color;
+    width: 40%;
+    height: sizes.$card * 0.5;
+    max-height: sizes.$card;
+}
