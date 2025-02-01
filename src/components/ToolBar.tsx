@@ -1,24 +1,16 @@
 import { Dispatch, FunctionComponent, SetStateAction, useContext } from "react";
-import { Input } from "../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Toggle } from "../ui/toggle";
+import { Input } from "./ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Toggle } from "./ui/toggle";
 import { Language } from "@/models/Language";
 import AppContext from "@/app/appContext";
-import styles from "./style.module.scss";
 
 interface ToolBarProps {
 }
 
 const ToolBar: FunctionComponent<ToolBarProps> = () => {
-    return (<section className={styles.toolbar}>
-    </section>);
-}
-
-export default ToolBar;
-
-/* 
-
-<div className="flex justify-between items-center m-5 gap-6 p-4 bg-white shadow-md rounded-md">
+    const appContext = useContext(AppContext);
+    return (<><div className="flex justify-between items-center m-5 gap-6 p-4 bg-white shadow-md rounded-md">
         <div>
             <h2>Tamanho do titulo</h2>
             <div className="flex gap-2 p-2 rounded-md bg-slate-200">
@@ -65,6 +57,7 @@ export default ToolBar;
             <Toggle onClick={() => { appContext.setBold(prev => !prev) }} variant={"outline"} className="p-3 rounded-md ">Negrito</Toggle>
         </div>
     </div>
+    </>);
+}
 
-
-*/
+export default ToolBar;
