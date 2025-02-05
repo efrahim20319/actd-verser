@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import styles from "./style.module.scss";
+import SelectsGrid from "./SelectsGrid/SelectsGrid";
 
 interface SelectionCardProps {
 
@@ -13,7 +14,7 @@ const SelectionCard: FunctionComponent<SelectionCardProps> = () => {
             <CardDescription>Select the chapter and verse that will be used</CardDescription>
         </CardHeader>
         <CardContent>
-
+            <SelectsGrid/>
         </CardContent>
         <CardFooter >
 

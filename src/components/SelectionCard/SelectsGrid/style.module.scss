@@ -1,0 +1,11 @@
+.selectsGrid {  display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1em 1em;
+    grid-auto-flow: row;
+    grid-template-areas:
+      ". ."
+      ". .";
+      height: fit-content;
+  }
+  
