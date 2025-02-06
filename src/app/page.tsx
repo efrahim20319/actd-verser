@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import VerseBlock from "@/components/verseBlock";
+import VerseBlock from "@/components/VerseBlock/verseBlock";
 import { languages } from "@/data/languages";
 import { versionByAbbrev } from "@/data/versionByAbbrev";
 import { Book } from "@/models/Book";

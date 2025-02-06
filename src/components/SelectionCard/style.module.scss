@@ -3,8 +3,25 @@
 
 
 .selectionCard {
-    background-color: colors.$base-color;
+    background-color: colors.$base;
     width: 40%;
-    height: sizes.$card * 0.6;
+    height: sizes.$card;
     max-height: sizes.$card;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+
+    &__header {
+    }
+
+    &__content {
+        
+    }
+
+    &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 }
