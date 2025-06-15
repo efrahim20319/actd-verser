@@ -1,0 +1,6 @@
+@use "@/styles/colors.scss";
+
+.toolbar {
+    background-color: colors.$secondary;
+    height: 3.5em;
+}

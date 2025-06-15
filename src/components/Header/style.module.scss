@@ -1,0 +1,27 @@
+@use "@/styles/colors.scss";
+@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+.header {
+    color: white;
+    background-color: colors.$base;
+    display: flex;
+    padding: 1em;
+    padding-left: 3em;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    font-size: 1.5em;
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+
+
+
+    span {
+        font-family: "Sansita Swashed", system-ui;
+        font-optical-sizing: auto;
+        font-weight: 900;
+        font-style: normal;
+        color: gold;
+    }
+}

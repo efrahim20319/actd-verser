@@ -1,0 +1,27 @@
+@use "@/styles/colors.scss";
+@use "@/styles/sizes.scss";
+
+
+.selectionCard {
+    background-color: colors.$base;
+    width: 40%;
+    height: sizes.$card;
+    max-height: sizes.$card;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+
+    &__header {
+    }
+
+    &__content {
+        
+    }
+
+    &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}

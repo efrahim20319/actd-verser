@@ -1,0 +1,8 @@
+@use "@/styles/colors.scss";
+@use "@/styles/sizes.scss";
+
+.previewCard {
+    background-color: colors.$base;
+    width: 58%;
+    height: sizes.$card;
+}
