@@ -7,7 +7,7 @@ interface HeaderProps {
 
 const Header: FunctionComponent<HeaderProps> = () => {
     return (<header className={style.header}>
-        Hello<span>World</span>
+        ACTD<span >Verser</span>
     </header>);
 }
 

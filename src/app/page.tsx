@@ -1,6 +1,6 @@
 "use client"
 
-import Canvas from "@/components/Canvas";
+import Canvas from "@/components/Canvas/Canvas";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle"
 import {
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import VerseBlock from "@/components/verseBlock";
+import VerseBlock from "@/components/VerseBlock/verseBlock";
 import { languages } from "@/data/languages";
 import { versionByAbbrev } from "@/data/versionByAbbrev";
 import { Book } from "@/models/Book";
@@ -85,7 +85,8 @@ export default function Home() {
   }, [])
 
   function getVerses(version: Version, book: Book, chapter: string) {
-    fetch(`https://www.abibliadigital.com.br/api/verses/${version.abbrev}/${book.abbrev.pt}/${chapter}`, {
+    const url = `https://www.abibliadigital.com.br/api/verses/${version.abbrev}/${book.abbrev.pt}/${chapter}`
+    fetch(url, {
       headers: {
         "authorization": `Bearer ${token}`
       }
@@ -97,7 +98,7 @@ export default function Home() {
             setVersesStates(Array(data.verses.length).fill(false));
           })
         } else {
-          console.log(results);
+          console.log("Deu erro");
         }
       })
   }
@@ -113,9 +114,16 @@ export default function Home() {
 
 
   return (
-    <AppContext.Provider value={{ bold, fontFamily, lineHeight, setBold, setFontFamily, setLineHeight, setSpaceBetweenVerses, setTitleFontSize, setVerseFontSize, spaceBetweenVerses, titleFontSize, verseFontSize }}>
+    <AppContext.Provider value={{ setSelectedImage, imageState, versesStates, setVersesStates, setPassageTitle, verses, version, setChapters, setChapter, clear, getVerses, chapters, chapter, setBooks, setBook, books, book, setverseByNumber, setVersion, setVerses, passageTitle, selectedImage, bold, fontFamily, lineHeight, setBold, canvasRef, setFontFamily, setLineHeight, setSpaceBetweenVerses, setTitleFontSize, setVerseFontSize, spaceBetweenVerses, titleFontSize, verseFontSize, verseByNumber, language, setLanguage }}>
       <Header />
-      <ToolBar />
+      <ToolBar bold fontFamily={fontFamily} lineHeight={lineHeight} setBold={setBold} 
+      setFontFamily={setFontFamily} setLineHeight={setLineHeight}
+       setSpaceBetweenVerses={setSpaceBetweenVerses} setTitleFontSize={setTitleFontSize} 
+       setVerseFontSize={setVerseFontSize}
+       spaceBetweenVerses={spaceBetweenVerses}
+       titleFontSize={titleFontSize}
+       verseFontSize={verseFontSize}
+       />
       <main className={styles.content}>
         <SelectionCard />
         <PreviewCard />
