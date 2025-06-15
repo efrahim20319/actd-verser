@@ -1,9 +1,10 @@
 import { Context, Dispatch, FunctionComponent, SetStateAction, useContext } from "react";
+
+import { Language } from "@/models/Language";
+import AppContext from "@/app/appContext";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Toggle } from "../ui/toggle";
-import { Language } from "@/models/Language";
-import AppContext from "@/app/appContext";
 
 interface ToolBarProps {
     titleFontSize: number,

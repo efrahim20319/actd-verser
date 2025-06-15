@@ -32,8 +32,12 @@ import {
 } from "@/components/ui/dialog"
 import Image from "next/image";
 import AppContext from "./appContext";
-import ToolBar from "@/components/ToolBar";
+import ToolBar from "@/components/ToolBar/ToolBar";
 import createTitle from "@/utils/createTitle";
+import styles from "./styles.module.scss";
+import Header from "@/components/Header/Header";
+import SelectionCard from "@/components/SelectionCard/SelectionCard";
+import PreviewCard from "@/components/PreviewCard/PreviewCard";
 
 
 
@@ -380,3 +384,4 @@ export default function Home() {
 
   );
 }
+*/
