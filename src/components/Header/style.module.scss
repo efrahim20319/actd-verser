@@ -1,6 +1,13 @@
 @use "@/styles/colors.scss";
-@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@font-face {
+    font-family: Roboto;
+    src: url("/assets/fonts/Roboto/static/Roboto-Regular.ttf");
+}
+
+@font-face {
+    font-family: SansitaSwashed;
+    src: url("/assets/fonts/Sansita_Swashed/static/SansitaSwashed-Regular.ttf");
+}
 
 .header {
     color: white;
@@ -12,13 +19,13 @@
     align-items: center;
     gap: 5px;
     font-size: 1.5em;
-    font-family: "Roboto", sans-serif;
+    font-family: Roboto, sans-serif;
     font-weight: 900;
 
 
 
     span {
-        font-family: "Sansita Swashed", system-ui;
+        font-family: SansitaSwashed, system-ui;
         font-optical-sizing: auto;
         font-weight: 900;
         font-style: normal;
