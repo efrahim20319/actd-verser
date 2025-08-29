@@ -110,13 +110,17 @@ const VersesSelects: FunctionComponent<VersesSelectsProps> = ({ setChapter,  cha
                 })}
             </SelectContent>
         </Select>
-        <Select onValueChange={(value) => {
+        <Select onValueChange={async (value) => {
             setVersion((versionByAbbrev.get(value) as Version))
             setVerses([]); //resetar versiculos
             setverseByNumber(new Map()); // resetar o mar verseByNumber
             if (book && chapter) {
                 clear();
-                getVerses(versionByAbbrev.get(value) as Version, book, chapter);
+                await getVerses(versionByAbbrev.get(value) as Version, book, chapter);
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: "smooth"
+                });
 
             }
         }}>

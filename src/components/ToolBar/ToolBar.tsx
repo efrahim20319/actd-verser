@@ -22,7 +22,7 @@ interface ToolBarProps {
 }
 
 const ToolBar: FunctionComponent<ToolBarProps> = ({titleFontSize, setTitleFontSize, verseFontSize, setVerseFontSize, lineHeight, setLineHeight, spaceBetweenVerses, setSpaceBetweenVerses, setFontFamily, setBold}) => {
-    return (<div  className="hidden justify-around items-center p-3 lg:flex shadow-md md:hidden">
+    return (<div  className="hidden justify-around items-center p-3 lg:flex shadow-md">
         <div>
             <h2>Tamanho do titulo</h2>
             <div className="flex gap-2  rounded-md bg-slate-200">

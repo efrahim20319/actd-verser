@@ -20,7 +20,7 @@ const PreviewCard: FunctionComponent<SelectionCardProps> = () => {
     const book = context.book;
     const chapter = context.chapter;
     const canvasRef = context.canvasRef;
-    return (<Card className="w-full md:w-[58%]">
+    return (<Card className="w-full md:w-[58%] prevCards">
         <CardHeader>
             <CardTitle>Preview</CardTitle>
             <CardDescription>Output image</CardDescription>

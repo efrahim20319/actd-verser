@@ -84,7 +84,7 @@ export default function Home() {
       })
   }, [])
 
-  function getVerses(version: Version, book: Book, chapter: string) {
+  async function getVerses(version: Version, book: Book, chapter: string) {
     const url = `https://www.abibliadigital.com.br/api/verses/${version.abbrev}/${book.abbrev.pt}/${chapter}`
     fetch(url, {
       headers: {

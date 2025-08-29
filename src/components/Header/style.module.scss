@@ -14,12 +14,14 @@
     background-color: colors.$base;
     display: flex;
     padding: 1em 2em 1em 2em;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     gap: 5px;
     font-size: 1.5em;
     font-family: Roboto, sans-serif;
     font-weight: 900;
+    width: 100%;
+
 
 
 
