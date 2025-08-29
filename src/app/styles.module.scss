@@ -5,4 +5,12 @@
     padding: 2em;
     justify-content: space-between;
     align-items: flex-start;
+    flex-direction: column;
+    gap: 1em;
+}
+
+@media screen and (min-width: 768px) {
+  .content {
+    flex-direction: row;
+  }
 }

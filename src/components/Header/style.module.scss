@@ -13,8 +13,7 @@
     color: white;
     background-color: colors.$base;
     display: flex;
-    padding: 1em;
-    padding-left: 3em;
+    padding: 1em 2em 1em 2em;
     justify-content: flex-start;
     align-items: center;
     gap: 5px;
@@ -31,4 +30,10 @@
         font-style: normal;
         color: gold;
     }
+}
+
+@media screen and (min-width: 768px) {
+  .header {
+    padding: 1em 2em 1em 2em;
+  }
 }

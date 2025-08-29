@@ -28,7 +28,7 @@ const SelectionCard: FunctionComponent<SelectionCardProps> = () => {
     let chapter = context.chapter;
     let verseByNumber = context.verseByNumber;
     let versesStates = context.versesStates;
-    return (<Card className="w-[40%]">
+    return (<Card className="w-full md:w-[40%]">
         <CardHeader>
             <CardTitle>Select the verse</CardTitle>
             <CardDescription>Select the chapter and verse that will be used</CardDescription>
